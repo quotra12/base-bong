@@ -1,8 +1,8 @@
 import { base } from "wagmi/chains";
 
-/** Set after deploy: forge create contracts/src/BaseBongGM.sol:BaseBongGM --rpc-url https://mainnet.base.org */
-export const GM_CONTRACT_ADDRESS =
-  "0x862a5C4200cED19279951e7074b14da1B6Fc2bCD" as const;
+/** Base Mainnet — deployed via Remix */
+export const GM_CONTRACT_ADDRESS: `0x${string}` =
+  "0x862a5C4200cED19279951e7074b14da1B6Fc2bCD";
 
 export const DEPLOY_CHAIN_ID = base.id;
 
