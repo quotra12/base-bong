@@ -37,6 +37,7 @@ export const metadata: Metadata = {
     images: [{ url: "/image.png", width: 1024, height: 1024 }],
   },
   other: {
+    "base:app_id": "6a10edac2f5dad1ef72e65c2",
     "fc:miniapp": fcMiniAppEmbed,
     "fc:frame": fcMiniAppEmbed,
   },
