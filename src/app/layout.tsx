@@ -26,6 +26,9 @@ const geistMono = Geist_Mono({
 
 const fcMiniAppEmbed = JSON.stringify(buildFcMiniAppEmbed(siteUrl));
 
+/** Base.dev domain verification — must be in static <head> HTML */
+export const BASE_APP_ID = "6a10edac2f5dad1ef72e65c2";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: FARCASTER_APP_NAME,
@@ -37,7 +40,6 @@ export const metadata: Metadata = {
     images: [{ url: "/image.png", width: 1024, height: 1024 }],
   },
   other: {
-    "base:app_id": "6a10edac2f5dad1ef72e65c2",
     "fc:miniapp": fcMiniAppEmbed,
     "fc:frame": fcMiniAppEmbed,
   },
@@ -53,6 +55,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <meta name="base:app_id" content={BASE_APP_ID} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
