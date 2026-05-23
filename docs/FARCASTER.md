@@ -4,6 +4,9 @@
 
 Live at: https://base-bong.vercel.app/.well-known/farcaster.json
 
+Icons: `icon.png` 1024×1024, `splash.png` 200×200 (same logo as Farcaster).
+Manifest includes both `miniapp` and `frame` keys for Base App + Warpcast.
+
 Domain verified via `accountAssociation` (FID 772593).
 
 ## Wallet in Farcaster / Warpcast
