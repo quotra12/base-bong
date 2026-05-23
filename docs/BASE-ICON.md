@@ -1,25 +1,49 @@
-# Иконка в Base App
+# Иконка в Base App (важно)
 
-Farcaster и Base App кэшируют иконку **по URL**. Старый путь `/icon.png` мог остаться в кэше Base навсегда.
+## Почему в Warpcast логотип есть, а в Base — нет
 
-## URL логотипа (после деплоя)
+После **9 апреля 2026** Base App берёт иконку **из настроек проекта на base.dev**, а не только из `farcaster.json`.
 
-- Иконка: https://base-bong.vercel.app/brand/base-bong-icon.png
-- Splash: https://base-bong.vercel.app/brand/base-bong-splash.png
+Манифест на сайте уже правильный, но Base может **игнорировать** его и показывать иконку, загруженную (или закэшированную) в дашборде.
 
-Манифест: https://base-bong.vercel.app/.well-known/farcaster.json
+## URL логотипа (вставьте на base.dev)
 
-## Обязательно на base.dev
+```
+https://base-bong.vercel.app/logo.png
+```
 
-Base App **часто берёт иконку из настроек проекта**, а не только из манифеста:
+Splash (200×200):
 
-1. Откройте https://base.dev → ваш проект **Base Bong GM**
-2. **App settings** → **Icon**
-3. Загрузите файл `public/brand/base-bong-icon.png` (1024×1024 PNG)
-4. Сохраните
+```
+https://base-bong.vercel.app/logo-splash.png
+```
+
+## Шаги на base.dev (обязательно)
+
+1. https://base.dev → проект **Base Bong GM**
+2. **App settings** / **Metadata**
+3. Поле **Icon** — вставьте URL `https://base-bong.vercel.app/logo.png`  
+   (если есть только загрузка файла — загрузите `public/logo.png` и **Save**)
+4. **Primary URL** = `https://base-bong.vercel.app`
+5. Сохраните и откройте https://base.dev/preview → Refresh
+
+## Vercel
+
+В **Settings → Environment Variables** (Production):
+
+| Name | Value |
+|------|--------|
+| `NEXT_PUBLIC_SITE_URL` | `https://base-bong.vercel.app` |
+
+Без этого в HTML попадали preview-URL (`base-bong-xxxxx.vercel.app`) и Base мог не подтянуть картинки.
+
+## В приложении Base
+
+1. Удалите мини-приложение из списка
+2. Откройте снова с https://base-bong.vercel.app
+3. Сделайте **пост/шаринг** ссылки в Base (индексация ~10 мин)
 
 ## Проверка
 
-1. https://base.dev/preview — введите `base-bong.vercel.app`, Refresh
-2. В Base App: удалите мини-приложение из списка и откройте снова
-3. Поделитесь ссылкой на приложение в Base (индексация ~10 мин)
+- https://base-bong.vercel.app/logo.png — синий логотип «B»
+- https://base-bong.vercel.app/.well-known/farcaster.json — `iconUrl` должен указывать на `/logo.png`

@@ -1,8 +1,8 @@
 import {
-  APP_ICON_URL,
-  APP_IMAGE_URL,
-  APP_SPLASH_URL,
-  getSiteOrigin,
+  CANONICAL_SITE_URL,
+  getAppIconUrl,
+  getAppImageUrl,
+  getAppSplashUrl,
 } from "@/config/appAssets";
 
 export const FARCASTER_ACCOUNT_ASSOCIATION = {
@@ -13,22 +13,23 @@ export const FARCASTER_ACCOUNT_ASSOCIATION = {
     "aNKxg7IXaSpxXReRuoKnm61D2oW2dNb5B7T8aSBNVTwkcsuxjZHNnQWkMciljtQZuEha1zYhOfAw2820d/6MhBs=",
 } as const;
 
-const MINIAPP_METADATA = {
-  version: "1",
-  name: "Base Bong GM",
-  iconUrl: APP_ICON_URL,
-  homeUrl: getSiteOrigin(),
-  imageUrl: APP_IMAGE_URL,
-  buttonTitle: "Tap GM",
-  splashImageUrl: APP_SPLASH_URL,
-  splashBackgroundColor: "#09090b",
-  webhookUrl: `${getSiteOrigin()}/api/webhook`,
-} as const;
-
+/** Manifest always uses the production domain so Base/Warpcast fetch the same icon URL. */
 export function buildFarcasterManifest() {
+  const miniapp = {
+    version: "1",
+    name: "Base Bong GM",
+    iconUrl: getAppIconUrl(CANONICAL_SITE_URL),
+    homeUrl: CANONICAL_SITE_URL,
+    imageUrl: getAppImageUrl(CANONICAL_SITE_URL),
+    buttonTitle: "Tap GM",
+    splashImageUrl: getAppSplashUrl(CANONICAL_SITE_URL),
+    splashBackgroundColor: "#09090b",
+    webhookUrl: `${CANONICAL_SITE_URL}/api/webhook`,
+  } as const;
+
   return {
     accountAssociation: FARCASTER_ACCOUNT_ASSOCIATION,
-    miniapp: MINIAPP_METADATA,
-    frame: MINIAPP_METADATA,
+    miniapp,
+    frame: miniapp,
   };
 }

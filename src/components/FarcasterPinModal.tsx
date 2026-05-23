@@ -21,7 +21,7 @@ export function FarcasterPinModal() {
       <div className="w-full max-w-sm rounded-3xl border border-violet-500/40 bg-zinc-900 p-6 shadow-2xl shadow-violet-900/30">
         <div className="flex flex-col items-center text-center">
           <Image
-            src="/brand/base-bong-icon.png"
+            src="/logo.png"
             alt="Base Bong GM"
             width={96}
             height={96}

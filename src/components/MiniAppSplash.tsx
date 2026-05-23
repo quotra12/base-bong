@@ -10,7 +10,7 @@ export function MiniAppSplash() {
       aria-hidden
     >
       <Image
-        src="/brand/base-bong-icon.png"
+        src="/logo.png"
         alt="Base Bong GM"
         width={160}
         height={160}

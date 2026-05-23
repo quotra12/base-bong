@@ -5,17 +5,32 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/icon.png",
-        destination: "/brand/base-bong-icon.png",
+        destination: "/logo.png",
         permanent: false,
       },
       {
         source: "/splash.png",
-        destination: "/brand/base-bong-splash.png",
+        destination: "/logo-splash.png",
         permanent: false,
       },
       {
         source: "/image.png",
-        destination: "/brand/base-bong-og.png",
+        destination: "/logo.png",
+        permanent: false,
+      },
+      {
+        source: "/brand/base-bong-icon.png",
+        destination: "/logo.png",
+        permanent: false,
+      },
+      {
+        source: "/brand/base-bong-splash.png",
+        destination: "/logo-splash.png",
+        permanent: false,
+      },
+      {
+        source: "/brand/base-bong-og.png",
+        destination: "/logo.png",
         permanent: false,
       },
     ];

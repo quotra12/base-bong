@@ -1,34 +1,28 @@
 import {
-  APP_IMAGE_URL,
-  APP_SPLASH_URL,
-  getSiteOrigin,
+  CANONICAL_SITE_URL,
+  getAppImageUrl,
+  getAppSplashUrl,
 } from "@/config/appAssets";
 
 export const FARCASTER_APP_NAME = "Base Bong GM";
 
 export function getSiteUrl() {
-  return getSiteOrigin();
+  return CANONICAL_SITE_URL;
 }
 
-export function buildFcMiniAppEmbed(siteUrl: string = getSiteOrigin()) {
+export function buildFcMiniAppEmbed(siteUrl: string = CANONICAL_SITE_URL) {
   const origin = siteUrl.replace(/\/$/, "");
-  const imageUrl =
-    siteUrl === getSiteOrigin() ? APP_IMAGE_URL : `${origin}/brand/base-bong-og.png`;
-  const splashImageUrl =
-    siteUrl === getSiteOrigin()
-      ? APP_SPLASH_URL
-      : `${origin}/brand/base-bong-splash.png`;
 
   return {
     version: "1",
-    imageUrl,
+    imageUrl: getAppImageUrl(CANONICAL_SITE_URL),
     button: {
       title: "Tap GM",
       action: {
         type: "launch_miniapp",
         name: FARCASTER_APP_NAME,
         url: origin,
-        splashImageUrl,
+        splashImageUrl: getAppSplashUrl(CANONICAL_SITE_URL),
         splashBackgroundColor: "#09090b",
       },
     },

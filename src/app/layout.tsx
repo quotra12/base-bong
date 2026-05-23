@@ -3,17 +3,17 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
 
-import { APP_ICON_PATH, APP_IMAGE_PATH } from "@/config/appAssets";
+import {
+  APP_ICON_PATH,
+  APP_IMAGE_PATH,
+  CANONICAL_SITE_URL,
+} from "@/config/appAssets";
 import { buildFcMiniAppEmbed, FARCASTER_APP_NAME } from "@/config/farcaster";
 import { getConfig } from "@/config/wagmi";
 import { ProvidersShell } from "./providers-loader";
 import "./globals.css";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  (process.env.VERCEL_URL != null
-    ? `https://${process.env.VERCEL_URL}`
-    : "https://base-bong.vercel.app");
+const siteUrl = CANONICAL_SITE_URL;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
