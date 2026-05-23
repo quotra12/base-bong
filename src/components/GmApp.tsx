@@ -1,15 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   useAccount,
   useChainId,
-  useReadContract,
   useSwitchChain,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
-import { useQueryClient } from "@tanstack/react-query";
 import { formatEther } from "viem";
 import {
   DEPLOY_CHAIN_ID,
@@ -23,6 +21,7 @@ import {
 } from "@/config/contract";
 import { ConnectWallet } from "@/components/ConnectWallet";
 import { useFarcasterMiniApp } from "@/hooks/useFarcasterMiniApp";
+import { useGmStats } from "@/hooks/useGmStats";
 
 function explorerTxUrl(chainId: number, hash: string) {
   const base =
@@ -37,68 +36,19 @@ export function GmApp() {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const { switchChain, isPending: isSwitching } = useSwitchChain();
-  const queryClient = useQueryClient();
   const [now, setNow] = useState(() => Math.floor(Date.now() / 1000));
+  const syncedTxHash = useRef<string | undefined>(undefined);
 
-  const { data: gmCount } = useReadContract({
-    address: GM_CONTRACT_ADDRESS,
-    abi: gmAbi,
-    chainId: DEPLOY_CHAIN_ID,
-    functionName: "gmCount",
-    args: address ? [address] : undefined,
-    query: { enabled: !!address && isContractConfigured },
-  });
-
-  const { data: points } = useReadContract({
-    address: GM_CONTRACT_ADDRESS,
-    abi: gmAbi,
-    chainId: DEPLOY_CHAIN_ID,
-    functionName: "points",
-    args: address ? [address] : undefined,
-    query: { enabled: !!address && isContractConfigured },
-  });
-
-  const { data: lastGmAt } = useReadContract({
-    address: GM_CONTRACT_ADDRESS,
-    abi: gmAbi,
-    chainId: DEPLOY_CHAIN_ID,
-    functionName: "lastGmAt",
-    args: address ? [address] : undefined,
-    query: { enabled: !!address && isContractConfigured },
-  });
-
-  const { data: freeRemaining } = useReadContract({
-    address: GM_CONTRACT_ADDRESS,
-    abi: gmAbi,
-    chainId: DEPLOY_CHAIN_ID,
-    functionName: "freeGmsRemaining",
-    args: address ? [address] : undefined,
-    query: { enabled: !!address && isContractConfigured },
-  });
-
-  const { data: gmFeeOnChain } = useReadContract({
-    address: GM_CONTRACT_ADDRESS,
-    abi: gmAbi,
-    chainId: DEPLOY_CHAIN_ID,
-    functionName: "GM_FEE",
-    query: { enabled: isContractConfigured },
-  });
-
-  const { data: minInterval } = useReadContract({
-    address: GM_CONTRACT_ADDRESS,
-    abi: gmAbi,
-    chainId: DEPLOY_CHAIN_ID,
-    functionName: "MIN_INTERVAL",
-    query: { enabled: isContractConfigured },
-  });
-
-  const { data: totalGms } = useReadContract({
-    address: GM_CONTRACT_ADDRESS,
-    abi: gmAbi,
-    chainId: DEPLOY_CHAIN_ID,
-    functionName: "totalGms",
-    query: { enabled: isContractConfigured },
-  });
+  const {
+    gmCount,
+    points,
+    lastGmAt,
+    freeRemaining,
+    totalGms,
+    gmFeeOnChain,
+    minInterval,
+    refreshStats,
+  } = useGmStats();
 
   const { data: hash, isPending, writeContract, error: writeError } =
     useWriteContract();
@@ -113,9 +63,18 @@ export function GmApp() {
   }, []);
 
   useEffect(() => {
-    if (!isSuccess || !address) return;
-    void queryClient.invalidateQueries({ queryKey: ["readContract"] });
-  }, [isSuccess, address, queryClient]);
+    if (!isSuccess || !hash) return;
+    if (syncedTxHash.current === hash) return;
+    syncedTxHash.current = hash;
+
+    const sync = async () => {
+      await refreshStats();
+      // Base RPC can return stale reads right after receipt.
+      window.setTimeout(() => void refreshStats(), 800);
+      window.setTimeout(() => void refreshStats(), 2500);
+    };
+    void sync();
+  }, [isSuccess, hash, refreshStats]);
 
   const feeWei = gmFeeOnChain ?? GM_FEE_WEI;
   const feeLabel = formatEther(feeWei);
