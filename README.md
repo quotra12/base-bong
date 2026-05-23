@@ -1,4 +1,4 @@
-# base-bong 
+# base-bong 20
 
 Tap **GM** on **Base Mainnet** — each GM earns **10 points** onchain.
 
