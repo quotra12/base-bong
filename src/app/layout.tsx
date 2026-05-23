@@ -29,6 +29,10 @@ const fcMiniAppEmbed = JSON.stringify(buildFcMiniAppEmbed(siteUrl));
 /** Base.dev domain verification — must be in static <head> HTML */
 export const BASE_APP_ID = "6a10edac2f5dad1ef72e65c2";
 
+/** Talent app domain verification */
+export const TALENTAPP_PROJECT_VERIFICATION =
+  "83d3d04102f9d68ad02766418200eb8b2e4870367da7d18aadd8a7c97cebf74ee86df62a4846f7ad993630f83c13877dbb455b70ff363b8eddf5ec70cf04e2e8";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: FARCASTER_APP_NAME,
@@ -57,6 +61,10 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <meta name="base:app_id" content={BASE_APP_ID} />
+        <meta
+          name="talentapp:project_verification"
+          content={TALENTAPP_PROJECT_VERIFICATION}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
