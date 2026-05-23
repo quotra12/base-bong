@@ -1,6 +1,6 @@
 import {
+  APP_IMAGE_PATH,
   CANONICAL_SITE_URL,
-  getAppImageUrl,
   getAppSplashUrl,
 } from "@/config/appAssets";
 
@@ -15,7 +15,7 @@ export function buildFcMiniAppEmbed(siteUrl: string = CANONICAL_SITE_URL) {
 
   return {
     version: "1",
-    imageUrl: getAppImageUrl(CANONICAL_SITE_URL),
+    imageUrl: `${CANONICAL_SITE_URL}${APP_IMAGE_PATH}`,
     button: {
       title: "Tap GM",
       action: {

@@ -39,14 +39,19 @@ export const metadata: Metadata = {
   title: FARCASTER_APP_NAME,
   description:
     "Tap GM on Base. 3 free per day, then paid GMs. Earn points for airdrop.",
+  manifest: "/manifest.webmanifest",
   icons: {
-    icon: APP_ICON_PATH,
-    apple: APP_ICON_PATH,
+    icon: [
+      { url: "/logo-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/logo-512.png", sizes: "512x512", type: "image/png" },
+      { url: APP_ICON_PATH, sizes: "1024x1024", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: FARCASTER_APP_NAME,
     description: "Tap GM onchain on Base. Stack points for airdrop.",
-    images: [{ url: APP_IMAGE_PATH, width: 1024, height: 1024 }],
+    images: [{ url: APP_IMAGE_PATH, width: 1200, height: 628 }],
   },
   other: {
     "fc:miniapp": fcMiniAppEmbed,
@@ -65,8 +70,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href={APP_ICON_PATH} />
-        <link rel="apple-touch-icon" href={APP_ICON_PATH} />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="icon" href="/logo-192.png" sizes="192x192" type="image/png" />
+        <link rel="icon" href="/logo-512.png" sizes="512x512" type="image/png" />
+        <link rel="icon" href={APP_ICON_PATH} sizes="1024x1024" type="image/png" />
+        <link
+          rel="apple-touch-icon"
+          href="/apple-touch-icon.png"
+          sizes="180x180"
+        />
         <meta name="base:app_id" content={BASE_APP_ID} />
         <meta
           name="talentapp:project_verification"

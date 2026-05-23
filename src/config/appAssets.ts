@@ -1,10 +1,11 @@
 /** Canonical production domain — never use preview *.vercel.app URLs in manifests */
 export const CANONICAL_SITE_URL = "https://base-bong.vercel.app";
 
-/** Short paths — stable URLs for Base App + Farcaster icon fetchers */
-export const APP_ICON_PATH = "/logo.png";
+/** Optimized assets (must exist in /public after deploy) */
+export const APP_ICON_PATH = "/logo-512.png";
 export const APP_SPLASH_PATH = "/logo-splash.png";
-export const APP_IMAGE_PATH = "/logo.png";
+export const APP_IMAGE_PATH = "/thumbnail-191.png";
+export const APP_HERO_PATH = "/thumbnail-191.png";
 
 export function getSiteOrigin(requestHost?: string | null) {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
@@ -34,4 +35,8 @@ export function getAppSplashUrl(origin?: string) {
 
 export function getAppImageUrl(origin?: string) {
   return appAsset(APP_IMAGE_PATH, origin);
+}
+
+export function getAppHeroUrl(origin?: string) {
+  return appAsset(APP_HERO_PATH, origin);
 }

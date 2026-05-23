@@ -1,5 +1,6 @@
 import {
   CANONICAL_SITE_URL,
+  getAppHeroUrl,
   getAppIconUrl,
   getAppImageUrl,
   getAppSplashUrl,
@@ -13,23 +14,30 @@ export const FARCASTER_ACCOUNT_ASSOCIATION = {
     "aNKxg7IXaSpxXReRuoKnm61D2oW2dNb5B7T8aSBNVTwkcsuxjZHNnQWkMciljtQZuEha1zYhOfAw2820d/6MhBs=",
 } as const;
 
+const MINIAPP_METADATA = {
+  version: "1",
+  name: "Base Bong GM",
+  homeUrl: CANONICAL_SITE_URL,
+  iconUrl: getAppIconUrl(CANONICAL_SITE_URL),
+  imageUrl: getAppImageUrl(CANONICAL_SITE_URL),
+  heroImageUrl: getAppHeroUrl(CANONICAL_SITE_URL),
+  buttonTitle: "Tap GM",
+  splashImageUrl: getAppSplashUrl(CANONICAL_SITE_URL),
+  splashBackgroundColor: "#09090b",
+  webhookUrl: `${CANONICAL_SITE_URL}/api/webhook`,
+  description:
+    "Tap GM on Base Mainnet. 3 free GMs per day, earn points for a future airdrop.",
+  subtitle: "Daily GM · stack points",
+  primaryCategory: "social",
+  tags: ["gm", "base", "points", "airdrop", "daily"],
+  noindex: false,
+} as const;
+
 /** Manifest always uses the production domain so Base/Warpcast fetch the same icon URL. */
 export function buildFarcasterManifest() {
-  const miniapp = {
-    version: "1",
-    name: "Base Bong GM",
-    iconUrl: getAppIconUrl(CANONICAL_SITE_URL),
-    homeUrl: CANONICAL_SITE_URL,
-    imageUrl: getAppImageUrl(CANONICAL_SITE_URL),
-    buttonTitle: "Tap GM",
-    splashImageUrl: getAppSplashUrl(CANONICAL_SITE_URL),
-    splashBackgroundColor: "#09090b",
-    webhookUrl: `${CANONICAL_SITE_URL}/api/webhook`,
-  } as const;
-
   return {
     accountAssociation: FARCASTER_ACCOUNT_ASSOCIATION,
-    miniapp,
-    frame: miniapp,
+    miniapp: MINIAPP_METADATA,
+    frame: MINIAPP_METADATA,
   };
 }
