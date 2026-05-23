@@ -5,7 +5,9 @@ import { type ReactNode, useState } from "react";
 import type { State } from "wagmi";
 import { WagmiProvider } from "wagmi";
 
+import { FarcasterPinModal } from "@/components/FarcasterPinModal";
 import { WalletAutoReconnect } from "@/components/WalletAutoReconnect";
+import { FarcasterAddMiniAppProvider } from "@/context/FarcasterAddMiniAppContext";
 import { FarcasterMiniAppProvider } from "@/context/FarcasterMiniAppContext";
 import { wagmiConfig } from "@/config/wagmi";
 
@@ -26,8 +28,11 @@ export function Providers({
         reconnectOnMount={false}
       >
         <QueryClientProvider client={queryClient}>
-          <WalletAutoReconnect />
-          {children}
+          <FarcasterAddMiniAppProvider>
+            <WalletAutoReconnect />
+            <FarcasterPinModal />
+            {children}
+          </FarcasterAddMiniAppProvider>
         </QueryClientProvider>
       </WagmiProvider>
     </FarcasterMiniAppProvider>

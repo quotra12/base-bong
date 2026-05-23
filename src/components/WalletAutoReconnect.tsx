@@ -5,9 +5,9 @@ import { useConnection, useDisconnect, useReconnect } from "wagmi";
 
 import { useFarcasterMiniApp } from "@/hooks/useFarcasterMiniApp";
 
+const WALLET_USER_DISCONNECTED_KEY = "basebong_wallet_disconnected";
 const STUCK_CONNECT_MS = 12_000;
 
-/** Reconnect Warpcast wallet after Farcaster SDK is ready. */
 export function WalletAutoReconnect() {
   const { inMiniApp, isSdkReady, isLoading } = useFarcasterMiniApp();
   const { address, isConnecting, isReconnecting, status } = useConnection();
@@ -16,6 +16,8 @@ export function WalletAutoReconnect() {
   const didAutoReconnect = useRef(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem(WALLET_USER_DISCONNECTED_KEY) === "1") return;
     if (inMiniApp && isLoading) return;
     if (inMiniApp && !isSdkReady) return;
     if (didAutoReconnect.current) return;

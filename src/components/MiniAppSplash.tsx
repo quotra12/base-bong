@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export function MiniAppSplash() {
   return (
     <div
@@ -7,10 +9,14 @@ export function MiniAppSplash() {
       role="presentation"
       aria-hidden
     >
-      <div className="text-center">
-        <p className="text-4xl font-black text-white">Base Bong</p>
-        <p className="mt-2 text-sm text-zinc-400">GM on Base</p>
-      </div>
+      <Image
+        src="/icon.png"
+        alt="Base Bong GM"
+        width={160}
+        height={160}
+        className="rounded-3xl"
+        priority
+      />
     </div>
   );
 }

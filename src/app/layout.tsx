@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: FARCASTER_APP_NAME,
     description: "Tap GM onchain on Base. Stack points for airdrop.",
-    images: [{ url: "/image.svg", width: 1200, height: 630 }],
+    images: [{ url: "/image.png", width: 1024, height: 1024 }],
   },
   other: {
     "fc:miniapp": fcMiniAppEmbed,

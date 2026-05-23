@@ -7,11 +7,11 @@
   "frame": {
     "version": "1",
     "name": "Base Bong GM",
-    "iconUrl": "https://base-bong.vercel.app/icon.svg",
+    "iconUrl": "https://base-bong.vercel.app/icon.png",
     "homeUrl": "https://base-bong.vercel.app",
-    "imageUrl": "https://base-bong.vercel.app/image.svg",
+    "imageUrl": "https://base-bong.vercel.app/image.png",
     "buttonTitle": "Tap GM",
-    "splashImageUrl": "https://base-bong.vercel.app/splash.svg",
+    "splashImageUrl": "https://base-bong.vercel.app/splash.png",
     "splashBackgroundColor": "#09090b",
     "webhookUrl": "https://base-bong.vercel.app/api/webhook"
   }

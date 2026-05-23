@@ -12,14 +12,14 @@ export function buildFcMiniAppEmbed(siteUrl: string = SITE) {
   const origin = siteUrl.replace(/\/$/, "");
   return {
     version: "1",
-    imageUrl: `${origin}/image.svg`,
+    imageUrl: `${origin}/image.png`,
     button: {
       title: "Tap GM",
       action: {
         type: "launch_miniapp",
         name: FARCASTER_APP_NAME,
         url: origin,
-        splashImageUrl: `${origin}/splash.svg`,
+        splashImageUrl: `${origin}/splash.png`,
         splashBackgroundColor: "#09090b",
       },
     },

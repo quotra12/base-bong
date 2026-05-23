@@ -1,79 +1,126 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAccount, useConnect, useConnectors, useDisconnect } from "wagmi";
+import { useState } from "react";
+import {
+  useAccount,
+  useConnect,
+  useConnectors,
+  useDisconnect,
+} from "wagmi";
 
 import { useFarcasterMiniApp } from "@/hooks/useFarcasterMiniApp";
 
+const WALLET_USER_DISCONNECTED_KEY = "basebong_wallet_disconnected";
+
 export function ConnectWallet() {
-  const { address, isConnected, isConnecting, isReconnecting } = useAccount();
+  const { address, isConnected, isConnecting, isReconnecting, connector } =
+    useAccount();
   const { connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const connectors = useConnectors();
-  const { inMiniApp, isSdkReady, user } = useFarcasterMiniApp();
+  const { inMiniApp, user } = useFarcasterMiniApp();
+  const [showPicker, setShowPicker] = useState(false);
 
   const farcasterConnector = connectors.find((c) => c.id === "farcaster");
-  const otherConnectors = connectors.filter((c) => c.id !== "farcaster");
+  const extensionConnectors = connectors.filter(
+    (c) => c.id !== "farcaster",
+  );
 
-  useEffect(() => {
-    if (!inMiniApp || !isSdkReady || isConnected || !farcasterConnector) return;
-    connect({ connector: farcasterConnector });
-  }, [inMiniApp, isSdkReady, isConnected, farcasterConnector, connect]);
+  const handleDisconnect = (opts?: { openPicker?: boolean }) => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(WALLET_USER_DISCONNECTED_KEY, "1");
+    }
+    disconnect();
+    setShowPicker(opts?.openPicker ?? false);
+  };
+
+  const handleConnect = (connectorId: string) => {
+    const target = connectors.find((c) => c.id === connectorId);
+    if (!target) return;
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem(WALLET_USER_DISCONNECTED_KEY);
+    }
+    connect({ connector: target });
+    setShowPicker(false);
+  };
 
   if (isReconnecting) {
     return <p className="text-sm text-zinc-400">Reconnecting wallet…</p>;
   }
 
-  if (!isConnected) {
+  if (isConnected && !showPicker) {
     return (
-      <div className="flex w-full max-w-xs flex-col gap-2">
-        {inMiniApp && (
-          <p className="text-center text-xs text-violet-300">
-            Warpcast wallet will connect automatically
-          </p>
+      <div className="flex w-full max-w-xs flex-col items-center gap-2">
+        {user?.username && inMiniApp && (
+          <p className="text-sm text-violet-300">@{user.username}</p>
         )}
-        {farcasterConnector && !inMiniApp && (
+        <div className="flex w-full items-center justify-between gap-2 rounded-2xl border border-zinc-700 bg-zinc-900/80 px-4 py-3">
+          <div className="min-w-0">
+            <p className="text-xs text-zinc-500">{connector?.name ?? "Wallet"}</p>
+            <p className="truncate font-mono text-sm text-zinc-100">
+              {address?.slice(0, 6)}…{address?.slice(-4)}
+            </p>
+          </div>
+        </div>
+        <div className="flex w-full gap-2">
           <button
             type="button"
-            onClick={() => connect({ connector: farcasterConnector })}
-            disabled={isConnecting || isPending}
-            className="rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50"
+            onClick={() => handleDisconnect()}
+            className="flex-1 rounded-xl border border-zinc-600 py-2.5 text-sm font-medium text-zinc-200 hover:bg-zinc-800"
           >
-            Connect Farcaster
+            Disconnect
           </button>
-        )}
-        {otherConnectors.map((connector) => (
           <button
-            key={connector.uid}
             type="button"
-            onClick={() => connect({ connector })}
-            disabled={isConnecting || isPending}
-            className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-900 hover:bg-zinc-100 disabled:opacity-50"
+            onClick={() => handleDisconnect({ openPicker: true })}
+            className="flex-1 rounded-xl bg-zinc-100 py-2.5 text-sm font-semibold text-zinc-900 hover:bg-white"
           >
-            Connect {connector.name}
+            Change wallet
           </button>
-        ))}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      {user?.username && (
-        <p className="text-sm text-violet-300">@{user.username} on Farcaster</p>
-      )}
-      <div className="flex items-center gap-3 rounded-full border border-zinc-700 bg-zinc-900/80 px-4 py-2">
-        <span className="font-mono text-sm text-zinc-200">
-          {address?.slice(0, 6)}…{address?.slice(-4)}
-        </span>
+    <div className="flex w-full max-w-xs flex-col gap-2">
+      <p className="text-center text-xs text-zinc-500">
+        {showPicker ? "Choose wallet" : "Connect wallet to send GM"}
+      </p>
+
+      {inMiniApp && farcasterConnector && (
         <button
           type="button"
-          onClick={() => disconnect()}
-          className="text-xs text-zinc-400 hover:text-white"
+          onClick={() => handleConnect("farcaster")}
+          disabled={isConnecting || isPending}
+          className="rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50"
         >
-          Disconnect
+          Farcaster wallet (Warpcast)
         </button>
-      </div>
+      )}
+
+      {extensionConnectors.map((c) => (
+        <button
+          key={c.uid}
+          type="button"
+          onClick={() => handleConnect(c.id)}
+          disabled={isConnecting || isPending}
+          className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-900 hover:bg-zinc-100 disabled:opacity-50"
+        >
+          {c.name}
+          {c.id === "injected" ? " (browser extension)" : ""}
+        </button>
+      ))}
+
+      {showPicker && isConnected && (
+        <button
+          type="button"
+          onClick={() => setShowPicker(false)}
+          className="text-center text-xs text-zinc-500 hover:text-zinc-300"
+        >
+          Cancel
+        </button>
+      )}
     </div>
   );
 }

@@ -13,6 +13,7 @@ export const wagmiConfig = createConfig({
     baseAccount({
       appName: "Base Bong GM",
     }),
+    injected({ target: "metaMask" }),
     injected(),
   ],
   storage: createStorage({ storage: cookieStorage }),
