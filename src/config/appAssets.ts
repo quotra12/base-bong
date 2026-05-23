@@ -1,5 +1,7 @@
-/** Bump when replacing icon/splash so clients refresh cached artwork */
-export const APP_ICON_VERSION = "2";
+/** New path = new CDN cache key (Base ignores ?v= query on icon.png) */
+export const APP_ICON_PATH = "/brand/base-bong-icon.png";
+export const APP_SPLASH_PATH = "/brand/base-bong-splash.png";
+export const APP_IMAGE_PATH = "/brand/base-bong-og.png";
 
 const SITE =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
@@ -12,9 +14,9 @@ export function getSiteOrigin() {
 export function appAsset(path: string) {
   const base = SITE.replace(/\/$/, "");
   const normalized = path.startsWith("/") ? path : `/${path}`;
-  return `${base}${normalized}?v=${APP_ICON_VERSION}`;
+  return `${base}${normalized}`;
 }
 
-export const APP_ICON_URL = appAsset("/icon.png");
-export const APP_SPLASH_URL = appAsset("/splash.png");
-export const APP_IMAGE_URL = appAsset("/image.png");
+export const APP_ICON_URL = appAsset(APP_ICON_PATH);
+export const APP_SPLASH_URL = appAsset(APP_SPLASH_PATH);
+export const APP_IMAGE_URL = appAsset(APP_IMAGE_PATH);

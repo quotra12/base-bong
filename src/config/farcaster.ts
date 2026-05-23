@@ -12,9 +12,12 @@ export function getSiteUrl() {
 
 export function buildFcMiniAppEmbed(siteUrl: string = getSiteOrigin()) {
   const origin = siteUrl.replace(/\/$/, "");
-  const imageUrl = siteUrl === getSiteOrigin() ? APP_IMAGE_URL : `${origin}/image.png?v=2`;
+  const imageUrl =
+    siteUrl === getSiteOrigin() ? APP_IMAGE_URL : `${origin}/brand/base-bong-og.png`;
   const splashImageUrl =
-    siteUrl === getSiteOrigin() ? APP_SPLASH_URL : `${origin}/splash.png?v=2`;
+    siteUrl === getSiteOrigin()
+      ? APP_SPLASH_URL
+      : `${origin}/brand/base-bong-splash.png`;
 
   return {
     version: "1",

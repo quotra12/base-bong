@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
 
-import { APP_ICON_VERSION } from "@/config/appAssets";
+import { APP_ICON_PATH, APP_IMAGE_PATH } from "@/config/appAssets";
 import { buildFcMiniAppEmbed, FARCASTER_APP_NAME } from "@/config/farcaster";
 import { getConfig } from "@/config/wagmi";
 import { ProvidersShell } from "./providers-loader";
@@ -40,19 +40,13 @@ export const metadata: Metadata = {
   description:
     "Tap GM on Base. 3 free per day, then paid GMs. Earn points for airdrop.",
   icons: {
-    icon: `/icon.png?v=${APP_ICON_VERSION}`,
-    apple: `/icon.png?v=${APP_ICON_VERSION}`,
+    icon: APP_ICON_PATH,
+    apple: APP_ICON_PATH,
   },
   openGraph: {
     title: FARCASTER_APP_NAME,
     description: "Tap GM onchain on Base. Stack points for airdrop.",
-    images: [
-      {
-        url: `/image.png?v=${APP_ICON_VERSION}`,
-        width: 1024,
-        height: 1024,
-      },
-    ],
+    images: [{ url: APP_IMAGE_PATH, width: 1024, height: 1024 }],
   },
   other: {
     "fc:miniapp": fcMiniAppEmbed,
@@ -71,11 +65,8 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href={`/icon.png?v=${APP_ICON_VERSION}`} />
-        <link
-          rel="apple-touch-icon"
-          href={`/icon.png?v=${APP_ICON_VERSION}`}
-        />
+        <link rel="icon" href={APP_ICON_PATH} />
+        <link rel="apple-touch-icon" href={APP_ICON_PATH} />
         <meta name="base:app_id" content={BASE_APP_ID} />
         <meta
           name="talentapp:project_verification"
