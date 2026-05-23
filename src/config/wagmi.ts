@@ -1,28 +1,33 @@
 import { http, createConfig, createStorage, cookieStorage } from "wagmi";
-import { base, baseSepolia } from "wagmi/chains";
+import { base } from "wagmi/chains";
 import { baseAccount, injected } from "wagmi/connectors";
 
-export const chains = [base, baseSepolia] as const;
-export const defaultChain = base;
+import { farcasterMiniApp } from "@/lib/farcasterMiniAppConnector";
 
-export const config = createConfig({
+export const chains = [base] as const;
+
+export const wagmiConfig = createConfig({
   chains: [...chains],
   connectors: [
-    injected(),
+    farcasterMiniApp(),
     baseAccount({
       appName: "Base Bong GM",
     }),
+    injected(),
   ],
   storage: createStorage({ storage: cookieStorage }),
   ssr: true,
   transports: {
     [base.id]: http("https://mainnet.base.org"),
-    [baseSepolia.id]: http("https://sepolia.base.org"),
   },
 });
 
+export function getConfig() {
+  return wagmiConfig;
+}
+
 declare module "wagmi" {
   interface Register {
-    config: typeof config;
+    config: typeof wagmiConfig;
   }
 }

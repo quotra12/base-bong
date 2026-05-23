@@ -22,6 +22,7 @@ import {
   isContractConfigured,
 } from "@/config/contract";
 import { ConnectWallet } from "@/components/ConnectWallet";
+import { useFarcasterMiniApp } from "@/hooks/useFarcasterMiniApp";
 
 function explorerTxUrl(chainId: number, hash: string) {
   const base =
@@ -32,6 +33,7 @@ function explorerTxUrl(chainId: number, hash: string) {
 }
 
 export function GmApp() {
+  const { inMiniApp } = useFarcasterMiniApp();
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const { switchChain, isPending: isSwitching } = useSwitchChain();
@@ -147,7 +149,7 @@ export function GmApp() {
     <div className="flex w-full max-w-md flex-col items-center gap-8">
       <header className="text-center">
         <p className="text-xs font-medium uppercase tracking-widest text-blue-400">
-          Base Mainnet · Farcaster
+          Base Mainnet · {inMiniApp ? "Farcaster mini app" : "Web"}
         </p>
         <h1 className="mt-2 text-4xl font-black tracking-tight text-white">
           Base Bong GM

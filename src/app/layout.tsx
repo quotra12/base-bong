@@ -1,7 +1,18 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Providers } from "@/components/Providers";
+import { headers } from "next/headers";
+import { cookieToInitialState } from "wagmi";
+
+import { buildFcMiniAppEmbed, FARCASTER_APP_NAME } from "@/config/farcaster";
+import { getConfig } from "@/config/wagmi";
+import { ProvidersShell } from "./providers-loader";
 import "./globals.css";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  (process.env.VERCEL_URL != null
+    ? `https://${process.env.VERCEL_URL}`
+    : "https://base-bong.vercel.app");
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,27 +24,38 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const fcMiniAppEmbed = JSON.stringify(buildFcMiniAppEmbed(siteUrl));
+
 export const metadata: Metadata = {
-  title: "Base Bong GM",
+  metadataBase: new URL(siteUrl),
+  title: FARCASTER_APP_NAME,
   description:
-    "Tap GM on Base. Earn points — future airdrop. Mini app for Base App & Farcaster.",
+    "Tap GM on Base. 3 free per day, then paid GMs. Earn points for airdrop.",
   openGraph: {
-    title: "Base Bong GM",
-    description: "Tap GM onchain on Base. More GMs = more airdrop points.",
+    title: FARCASTER_APP_NAME,
+    description: "Tap GM onchain on Base. Stack points for airdrop.",
+    images: [{ url: "/image.svg", width: 1200, height: 630 }],
+  },
+  other: {
+    "fc:miniapp": fcMiniAppEmbed,
+    "fc:frame": fcMiniAppEmbed,
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieHeader = (await headers()).get("cookie") ?? "";
+  const initialState = cookieToInitialState(getConfig(), cookieHeader);
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>{children}</Providers>
+        <ProvidersShell initialState={initialState}>{children}</ProvidersShell>
       </body>
     </html>
   );
