@@ -54,7 +54,7 @@ export function ConnectWallet() {
         {user?.username && inMiniApp && (
           <p className="text-sm text-violet-300">@{user.username}</p>
         )}
-        <div className="flex w-full items-center justify-between gap-2 rounded-2xl border border-zinc-700 bg-zinc-900/80 px-4 py-3">
+        <div className="flex w-full items-center justify-between gap-2 rounded-xl border border-zinc-700 bg-zinc-900/80 px-3 py-2">
           <div className="min-w-0">
             <p className="text-xs text-zinc-500">{connector?.name ?? "Wallet"}</p>
             <p className="truncate font-mono text-sm text-zinc-100">
@@ -66,14 +66,14 @@ export function ConnectWallet() {
           <button
             type="button"
             onClick={() => handleDisconnect()}
-            className="flex-1 rounded-xl border border-zinc-600 py-2.5 text-sm font-medium text-zinc-200 hover:bg-zinc-800"
+            className="flex-1 rounded-lg border border-zinc-600 py-2 text-sm font-medium text-zinc-200 hover:bg-zinc-800"
           >
             Disconnect
           </button>
           <button
             type="button"
             onClick={() => handleDisconnect({ openPicker: true })}
-            className="flex-1 rounded-xl bg-zinc-100 py-2.5 text-sm font-semibold text-zinc-900 hover:bg-white"
+            className="flex-1 rounded-lg bg-zinc-100 py-2 text-sm font-semibold text-zinc-900 hover:bg-white"
           >
             Change wallet
           </button>
@@ -93,7 +93,7 @@ export function ConnectWallet() {
           type="button"
           onClick={() => handleConnect("farcaster")}
           disabled={isConnecting || isPending}
-          className="rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-lg bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50"
         >
           Farcaster wallet (Warpcast)
         </button>
@@ -105,7 +105,7 @@ export function ConnectWallet() {
           type="button"
           onClick={() => handleConnect(c.id)}
           disabled={isConnecting || isPending}
-          className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-900 hover:bg-zinc-100 disabled:opacity-50"
+          className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 hover:bg-zinc-100 disabled:opacity-50"
         >
           {c.name}
           {c.id === "injected" ? " (browser extension)" : ""}

@@ -2,12 +2,14 @@ import { http, createConfig, createStorage, cookieStorage } from "wagmi";
 import { base } from "wagmi/chains";
 import { baseAccount, injected } from "wagmi/connectors";
 
+import { BUILDER_DATA_SUFFIX } from "@/config/builder";
 import { farcasterMiniApp } from "@/lib/farcasterMiniAppConnector";
 
 export const chains = [base] as const;
 
 export const wagmiConfig = createConfig({
   chains: [...chains],
+  dataSuffix: BUILDER_DATA_SUFFIX,
   connectors: [
     farcasterMiniApp(),
     baseAccount({

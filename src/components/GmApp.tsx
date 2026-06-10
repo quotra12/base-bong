@@ -105,7 +105,7 @@ export function GmApp() {
   };
 
   return (
-    <div className="flex w-full max-w-md flex-col items-center gap-8">
+    <div className="flex w-full max-w-md flex-col items-center gap-5">
       <header className="text-center">
         <p className="text-xs font-medium uppercase tracking-widest text-blue-400">
           Base Mainnet · {inMiniApp ? "Farcaster mini app" : "Web"}
@@ -134,45 +134,24 @@ export function GmApp() {
 
       <ConnectWallet />
 
-      {isConnected && (
-        <div className="grid w-full grid-cols-2 gap-3">
-          <StatCard label="Your GMs" value={gmCount?.toString() ?? "0"} />
-          <StatCard
-            label="Your points"
-            value={points?.toString() ?? "0"}
-            highlight
-          />
-          <StatCard
-            label="Free GMs today"
-            value={`${freeLeft} / ${FREE_GM_PER_DAY}`}
-            className="col-span-2"
-          />
-          <StatCard
-            label="Global GMs"
-            value={totalGms?.toString() ?? "—"}
-            className="col-span-2"
-          />
-        </div>
-      )}
-
       {wrongChain && (
         <button
           type="button"
           onClick={() => switchChain({ chainId: DEPLOY_CHAIN_ID })}
           disabled={isSwitching}
-          className="w-full rounded-2xl bg-blue-600 py-4 font-bold text-white hover:bg-blue-500"
+          className="w-full rounded-xl bg-blue-600 py-3 text-sm font-bold text-white hover:bg-blue-500"
         >
           {isSwitching ? "Switching…" : "Switch to Base"}
         </button>
       )}
 
       {isConnected && !wrongChain && isContractConfigured && (
-        <>
+        <div className="flex w-full flex-col items-center gap-2">
           <button
             type="button"
             onClick={handleGm}
             disabled={!canGm || isPending || isConfirming}
-            className={`gm-pulse w-full rounded-3xl py-8 text-2xl font-black text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40 ${
+            className={`gm-pulse w-full rounded-2xl py-5 text-xl font-black text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40 ${
               isPaidGm
                 ? "bg-gradient-to-br from-amber-500 to-orange-600 shadow-amber-500/30"
                 : "bg-gradient-to-br from-blue-500 to-violet-600 shadow-blue-500/30"
@@ -211,7 +190,28 @@ export function GmApp() {
               View on Basescan →
             </a>
           )}
-        </>
+        </div>
+      )}
+
+      {isConnected && (
+        <div className="grid w-full grid-cols-2 gap-2">
+          <StatCard label="Your GMs" value={gmCount?.toString() ?? "0"} />
+          <StatCard
+            label="Your points"
+            value={points?.toString() ?? "0"}
+            highlight
+          />
+          <StatCard
+            label="Free GMs today"
+            value={`${freeLeft} / ${FREE_GM_PER_DAY}`}
+            className="col-span-2"
+          />
+          <StatCard
+            label="Global GMs"
+            value={totalGms?.toString() ?? "—"}
+            className="col-span-2"
+          />
+        </div>
       )}
 
       <footer className="text-center text-xs text-zinc-600">
@@ -243,11 +243,11 @@ function StatCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-zinc-800 bg-zinc-900/60 px-4 py-4 ${className}`}
+      className={`rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-2.5 ${className}`}
     >
       <p className="text-xs text-zinc-500">{label}</p>
       <p
-        className={`mt-1 text-2xl font-bold ${highlight ? "text-amber-300" : "text-white"}`}
+        className={`mt-0.5 text-xl font-bold ${highlight ? "text-amber-300" : "text-white"}`}
       >
         {value}
       </p>
