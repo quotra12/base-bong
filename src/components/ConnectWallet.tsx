@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useAccount,
+  useChainId,
   useConnect,
   useConnectors,
   useDisconnect,
+  useSwitchChain,
 } from "wagmi";
 
+import { DEPLOY_CHAIN_ID } from "@/config/contract";
 import { useFarcasterMiniApp } from "@/hooks/useFarcasterMiniApp";
 
 const WALLET_USER_DISCONNECTED_KEY = "basebong_wallet_disconnected";
@@ -15,7 +18,9 @@ const WALLET_USER_DISCONNECTED_KEY = "basebong_wallet_disconnected";
 export function ConnectWallet() {
   const { address, isConnected, isConnecting, isReconnecting, connector } =
     useAccount();
+  const chainId = useChainId();
   const { connect, isPending } = useConnect();
+  const { switchChain } = useSwitchChain();
   const { disconnect } = useDisconnect();
   const connectors = useConnectors();
   const { inMiniApp, user } = useFarcasterMiniApp();
@@ -25,6 +30,19 @@ export function ConnectWallet() {
   const extensionConnectors = connectors.filter(
     (c) => c.id !== "farcaster",
   );
+
+  useEffect(() => {
+    if (inMiniApp || !isConnected || isConnecting || isReconnecting) return;
+    if (chainId === DEPLOY_CHAIN_ID) return;
+    switchChain({ chainId: DEPLOY_CHAIN_ID });
+  }, [
+    chainId,
+    inMiniApp,
+    isConnected,
+    isConnecting,
+    isReconnecting,
+    switchChain,
+  ]);
 
   const handleDisconnect = (opts?: { openPicker?: boolean }) => {
     if (typeof window !== "undefined") {
@@ -40,7 +58,7 @@ export function ConnectWallet() {
     if (typeof window !== "undefined") {
       sessionStorage.removeItem(WALLET_USER_DISCONNECTED_KEY);
     }
-    connect({ connector: target });
+    connect({ connector: target, chainId: DEPLOY_CHAIN_ID });
     setShowPicker(false);
   };
 
