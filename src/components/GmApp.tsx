@@ -9,6 +9,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { formatEther } from "viem";
+import { BUILDER_DATA_SUFFIX } from "@/config/builder";
 import {
   DEPLOY_CHAIN_ID,
   FREE_GM_PER_DAY,
@@ -101,6 +102,8 @@ export function GmApp() {
       functionName: "gm",
       chainId: DEPLOY_CHAIN_ID,
       value: isPaidGm ? feeWei : BigInt(0),
+      // config.dataSuffix only applies to the public client; wallet txs need this explicitly
+      dataSuffix: BUILDER_DATA_SUFFIX,
     });
   };
 
